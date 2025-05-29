@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".", // Required for "paths"
+    "paths": {
+      "@/*": ["src/*"] // Alias '@' to 'src/'
+    },
+    "target": "ES2024",
+    "module": "commonjs",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "sourceMap": true
+  },
+  "include": ["src", "./*.ts"],
+  "exclude": ["node_modules", "dist"]
+}
