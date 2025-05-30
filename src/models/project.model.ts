@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IProject extends Document {
-  projectId: number; // Unique identifier for the project
+  projectId: string; // Unique identifier for the project
   name: string;
-  workspace: Types.ObjectId; // Reference Workspace
+  workspaceId: Types.ObjectId; // Reference Workspace
   files: Types.ObjectId[]; // References File
   createdAt: Date;
   updatedAt: Date;
@@ -11,9 +11,9 @@ export interface IProject extends Document {
 
 const ProjectSchema: Schema<IProject> = new Schema(
   {
-    projectId: { type: Number, required: true, unique: true },
+    projectId: { type: String, required: true, unique: true },
     name: { type: String, required: true, trim: true },
-    workspace: {
+    workspaceId: {
       type: Schema.Types.ObjectId,
       ref: "Workspace",
       required: true,

@@ -32,7 +32,7 @@ export const login = async (req: Request, res: Response): Promise<any> => {
   }
 
   // generate JWT token
-  const token = jwt.sign({ userId: user[0].userId }, process.env.JWT_SECRET!, {
+  const token = jwt.sign({ userId: user[0].userId, email: user[0].email }, process.env.JWT_SECRET!, {
     expiresIn: "1Y",
   });
 
@@ -63,36 +63,37 @@ export const register = async (req: Request, res: Response): Promise<any> => {
     );
   }
 
+  const workspaceId = uuidv4(); // Generate a unique workspace ID
+
   // create new user
   const newUser = new User({
     userId: uuidv4(), // Generate a unique user ID
     email,
     password, // In production, ensure to hash the password
+    workspace: null, // Workspace will be assigned later
   });
 
   // create workspace for the user
-  const workspace = {
-    workspaceId: uuidv4(), // Generate a unique workspace ID
+  const workspace = new Workspace({
+    workspaceId: workspaceId, // Generate a unique workspace ID
     owner: newUser._id,
     name: `${newUser.userId}'s Workspace`,
-  };
+  });
 
-  // Create new workspace instance and save it to the database
-  const newWorkspace = new Workspace(workspace);
 
   // Save both user and workspace to the database
   await newUser.save();
-  await newWorkspace.save();
+  await workspace.save();
 
   // Add the workspace reference to the user
-  newUser.workspace = newWorkspace._id as import("mongoose").Types.ObjectId;
+  newUser.workspace = workspace._id as import("mongoose").Types.ObjectId;
   await newUser.save();
 
   // Create a directory for the new workspace
   if (!process.env.WORKSPACE_PATH) {
     // If directory creation fails, clean up the created user and workspace
     await User.deleteOne({ _id: newUser._id });
-    await Workspace.deleteOne({ _id: newWorkspace._id });
+    await Workspace.deleteOne({ _id: workspace._id });
 
     return sendError(
       500,
@@ -104,14 +105,14 @@ export const register = async (req: Request, res: Response): Promise<any> => {
 
   const workspaceDirPath = join(
     process.env.WORKSPACE_PATH,
-    newWorkspace.workspaceId
+    workspace.workspaceId
   );
   try {
     await createDirectory(workspaceDirPath);
   } catch (error) {
     // If directory creation fails, clean up the created user and workspace
     await User.deleteOne({ _id: newUser._id });
-    await Workspace.deleteOne({ _id: newWorkspace._id });
+    await Workspace.deleteOne({ _id: workspace._id });
 
     return sendError(
       500,
@@ -122,7 +123,7 @@ export const register = async (req: Request, res: Response): Promise<any> => {
   }
 
   return sendSuccess(201, res, "User registered successfully", {
-    workspaceId: newWorkspace.workspaceId,
-    workspaceName: newWorkspace.name,
+    workspaceId: workspace.workspaceId,
+    workspaceName: workspace.name,
   });
 };

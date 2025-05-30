@@ -22,10 +22,12 @@ export async function getFilePath(req: Request, res: Response): Promise<any> {
   }
 
   // Get full path from DB or logic
-  const absolutePath = await getFilePathById(workspaceId, fileName);
+  const absolutePath = await getFilePathById(workspaceId, projectId ,fileName);
   if (!absolutePath || !fs.existsSync(absolutePath)) {
     return sendError(404, res, "File not found", "file.not_found");
   }
+
+
 
   // Send file as response
   res.sendFile(absolutePath, (err) => {
@@ -34,7 +36,5 @@ export async function getFilePath(req: Request, res: Response): Promise<any> {
       return sendError(500, res, "Error sending file", "file.send_error");
     }
   });
-  return sendSuccess(200, res, "File retrieved successfully", {
-    filePath: absolutePath,
-  });
+  
 }

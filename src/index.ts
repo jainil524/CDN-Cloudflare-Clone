@@ -5,8 +5,9 @@ import compression from "compression";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import rateLimit from "express-rate-limit";
-import jwt from "jsonwebtoken";
-import { v4 as uuidv4 } from "uuid";
+
+//multer
+import { multerMiddleware } from "@/middleware/multer.middleware";
 
 // Import routes
 import cdn from "@/routes/cdn.route";
@@ -31,6 +32,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
+app.set("trust proxy", 1); // Trust first proxy for rate limiting
+
 // Rate limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
@@ -47,10 +50,11 @@ app.use(limiter);
 // DB connection
 connectDB();
 
+
 // Route registration
 app.use("/cdn", verifyCdnToken ,cdn);
-app.use("/fsm", verifyCdnToken, fsm);
-app.use("/auth", authRouter);
+app.use("/fsm", multerMiddleware ,verifyCdnToken , fsm);
+app.use("/auth",authRouter);
 
 // Health check
 app.get("/health", (req: Request, res: Response) => {

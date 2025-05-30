@@ -7,13 +7,13 @@ export async function userOwnsWorkspace(
   workspaceId: string,
 ): Promise<boolean> {
   try {
-    if (!Types.ObjectId.isValid(workspaceId)) return false;
+    if (userId == null || workspaceId == null) return false;
 
     const user = await User.findOne({ userId }).select("_id").lean();
     if (!user) return false;
 
     const workspace = await Workspace.findOne({
-      _id: new Types.ObjectId(workspaceId),
+      workspaceId: workspaceId,
       owner: user._id,
     }).lean();
 

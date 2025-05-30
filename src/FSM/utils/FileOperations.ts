@@ -1,5 +1,9 @@
 import { mkdir, existsSync, readFile, writeFile } from "fs";
 
+const directoryExists = (path: string): boolean => {
+  return existsSync(path);
+}
+
 const createDirectory = (path: string): Promise<void> => {
   return new Promise((resolve, reject) => {
     if (!existsSync(path)) {
@@ -40,5 +44,5 @@ const writeFileAsync = (filePath: string, data: string): Promise<void> => {
   });
 }
 
-export { createDirectory, readFileAsync, writeFileAsync };
+export { createDirectory, readFileAsync, writeFileAsync, directoryExists };
 

@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document, Types } from "mongoose";
 
 export interface IFile extends Document {
-  fileId: number; // Unique identifier for the file
+  fileId: String; // Unique identifier for the file
   filename: string; // e.g., "fileid.ext"
   originalName: string; // original uploaded filename
   mimeType: string;
@@ -15,7 +15,7 @@ export interface IFile extends Document {
 
 const FileSchema: Schema<IFile> = new Schema(
   {
-    fileId: { type: Number, required: true, unique: true },
+    fileId: { type: String, required: true, unique: true },
     filename: { type: String, required: true, unique: true },
     originalName: { type: String, required: true },
     mimeType: { type: String, required: true },
