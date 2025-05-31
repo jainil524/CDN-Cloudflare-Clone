@@ -21,6 +21,7 @@ import { User } from "@/models/user.model";
 import { Workspace } from "@/models/workspace.model";
 import { Project } from "@/models/project.model";
 import { File } from "@/models/file.model";
+import { CryptoUtil } from "@/utils/Crypto";
 
 config();
 
@@ -88,7 +89,7 @@ export const getDetails = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  const token = req.query.token;
+  let token = req.query.token;
 
   if (!token)
     return sendError(
@@ -98,7 +99,11 @@ export const getDetails = async (
       "fsm.getWorkspaceId.missing_token"
     );
 
-  // Validate the token
+
+  // Decrypt the token
+  token = CryptoUtil.decrypt(token as string);
+
+  // Validate the toke
   const validToken = jwt.verify(
     token as string,
     process.env.JWT_SECRET || "default_secret_key"
@@ -377,6 +382,7 @@ export const addFileToProject = async (
     return sendSuccess(201, res, "File added to project successfully", {
       fileId: newFile.fileId,
       fileName: newFile.filename,
+      fullPath: `${workspaceId}/${projectId}/${newFile.filename}`,
     });
   } catch (error) {
     console.error("Error adding file to project:", error);
@@ -432,12 +438,26 @@ export const deleteFileFromProject = async (
       );
     }
 
+    // delete file from database
+    const file = await File.findOneAndDelete({ fileId, project: project._id });
+    if (!file)
+      return sendError(
+        404,
+        res,
+        "File not found in project",
+        "fsm.deleteFileFromProject.file_not_found"
+      );
+    
+    // delete file from filesystem
+
     const filePath = join(
       process.env.WORKSPACE_PATH,
       workspaceId,
       projectId,
-      fileId
+      file.filename
     );
+
+
     if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
 
     return sendSuccess(200, res, "File deleted from project successfully", {});

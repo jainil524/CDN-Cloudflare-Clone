@@ -2,12 +2,14 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
+import { CryptoUtil } from "@/utils/Crypto";
+
 export const verifyCdnToken = (
   req: Request,
   res: Response,
   next: NextFunction,
 ): void => {
-  const token = req.query.token as string;
+  let token = req.query.token as string;
 
   if (!token) {
     res.status(401).json({ message: "Missing access token" });
@@ -15,6 +17,10 @@ export const verifyCdnToken = (
   }
 
   try {
+
+    // Decrypt the token
+    token = CryptoUtil.decrypt(token);
+    
     const payload = jwt.verify(token, process.env.JWT_SECRET!);
     (req as any).auth = payload;
     next();
