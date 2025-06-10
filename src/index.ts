@@ -26,10 +26,7 @@ dotenv.config();
 const app = express();
 
 // Middleware stack
-app.use(cors({
-  origin: process.env.CORS_ORIGIN || "*", // Allow all origins by default, can be restricted
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-}));
+app.use(cors());
 app.use(helmet());
 app.use(compression());
 app.use(express.json());

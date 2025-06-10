@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import path from "path";
 import fs from "fs";
 import { userOwnsWorkspace } from "@/services/access.service";
@@ -22,7 +22,11 @@ export async function getFilePath(req: Request, res: Response): Promise<any> {
     }
 
     // Get full path from DB or logic
-    const absolutePath = await getFilePathById(workspaceId, projectId, fileName);
+    const absolutePath = await getFilePathById(
+      workspaceId,
+      projectId,
+      fileName
+    );
     if (!absolutePath || !fs.existsSync(absolutePath)) {
       return sendError(404, res, "File not found", "file.not_found");
     }
@@ -30,12 +34,22 @@ export async function getFilePath(req: Request, res: Response): Promise<any> {
     // ✅ Set proper headers for CORS and file serving
     res.setHeader("Access-Control-Allow-Origin", "*"); // or restrict to domain
     res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Cross-Origin-Resource-Policy", "cross-origin");
 
     // Optional: Set proper content type if known
     const ext = path.extname(fileName).toLowerCase();
     if (ext === ".jpg" || ext === ".jpeg") res.contentType("image/jpeg");
     else if (ext === ".png") res.contentType("image/png");
+    else if (ext === ".gif") res.contentType("image/gif");
+    else if (ext === ".webp") res.contentType("image/webp");
+    else if (ext === ".svg") res.contentType("image/svg+xml");
+    else if (ext === ".bmp") res.contentType("image/bmp");
     else if (ext === ".pdf") res.contentType("application/pdf");
 
     // Send file
@@ -45,7 +59,6 @@ export async function getFilePath(req: Request, res: Response): Promise<any> {
         return sendError(500, res, "Error sending file", "file.send_error");
       }
     });
-
   } catch (err) {
     console.error("Unexpected error:", err);
     return sendError(500, res, "Unexpected error", "file.unexpected_error");

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Action Required: Your HEMS Payment is Overdue</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Global Styles */
+        body {
+            font-family: 'Inter', Arial, Helvetica, sans-serif; /* Prefer Inter, fall back to web-safe */
+            margin: 0;
+            padding: 0;
+            background-color: #f4f7fa;
+            -webkit-text-size-adjust: 100%;
+            -ms-text-size-adjust: 100%;
+            width: 100% !important;
+            min-width: 100%;
+            height: 100%;
+            color: #333333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .heading {
+            text-align: center;
+        }
+
+        img {
+            -ms-interpolation-mode: bicubic;
+            border: 0;
+            height: auto;
+            line-height: 100%;
+            outline: none;
+            text-decoration: none;
+        }
+
+        a {
+            text-decoration: none;
+            color: #1a73e8; /* Google Blue */
+        }
+
+        /* Container & Card Styles */
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 12px; /* Rounded corners for the main card */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            overflow: hidden; /* Ensures rounded corners are visible */
+        }
+
+        .header-section {
+            background-color: #EF5350; /* A soft, alerting red/orange for overdue */
+            padding: 40px 50px;
+            text-align: center;
+            color: #ffffff;
+            border-top-left-radius: 12px;
+            border-top-right-radius: 12px;
+        }
+
+        .header-section h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .content-section {
+            padding: 30px;
+            line-height: 1.6;
+            color: #555555;
+        }
+
+        .highlight-box {
+            background-color: #FFEBEE; /* Very light red/pink for overdue highlight */
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            text-align: center;
+            border: 1px solid #FFCDD2; /* Slightly darker border */
+        }
+
+        .highlight-box strong {
+            display: block;
+            font-size: 24px; /* Larger for more impact */
+            color: #C62828; /* Stronger red for overdue amount */
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .highlight-box span {
+            display: block; /* Ensure span takes full width */
+            font-size: 16px;
+            color: #777777;
+            margin-top: 10px; /* Space out the warning message */
+        }
+
+        /* Table Styles */
+        .payment-table {
+            width: 100%;
+            margin-top: 30px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden; /* To ensure rounded corners */
+        }
+
+        .payment-table th {
+            background-color: #f0f0f0;
+            padding: 15px;
+            font-weight: 600;
+            color: #333333;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .payment-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eeeeee;
+        }
+
+        .payment-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .total-row td {
+            background-color: #FFEBEE; /* Light red background for total row */
+            font-weight: 700;
+            color: #C62828; /* Stronger red for total text */
+            font-size: 18px;
+        }
+
+        /* Button Styles */
+        .button-container {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #1a73e8; /* Google Blue */
+            color: #ffffff;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 10px rgba(26, 115, 232, 0.3); /* Button shadow */
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background-color: #155bb5; /* Slightly darker blue on hover */
+        }
+
+        /* Footer Styles */
+        .footer-section {
+            background-color: #333333;
+            padding: 30px;
+            text-align: center;
+            color: #cccccc;
+            font-size: 13px;
+            line-height: 1.5;
+            border-bottom-left-radius: 12px;
+            border-bottom-right-radius: 12px;
+        }
+
+        .footer-section a {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+
+        /* Responsive Styles */
+        @media screen and (max-width: 520px) {
+            .email-container {
+                border-radius: 0;
+            }
+
+            .header-section {
+                padding: 30px 20px;
+            }
+
+            .header-section h1 {
+                font-size: 24px;
+            }
+
+            .content-section {
+                padding: 20px;
+            }
+
+            .highlight-box strong {
+                font-size: 20px;
+            }
+
+            .highlight-box span {
+                font-size: 14px;
+            }
+
+            .payment-table th,
+            .payment-table td {
+                padding: 12px;
+            }
+
+            .total-row td {
+                font-size: 16px;
+            }
+
+            .button {
+                font-size: 16px;
+                padding: 12px 25px;
+            }
+
+            .footer-section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <center style="width: 100%; background-color: #f4f7fa; padding: 20px 0;">
+        <div class="email-container">
+            <!-- Header Section -->
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="header-section">
+                <tr>
+                    <td class="heading">
+                        <h1 style="color: #ffffff; font-size: 28px; font-weight: 600; padding-block: 20px;">Urgent: Overdue Payment Reminder</h1>
+                        <p style="color: #ffffff; font-size: 16px; margin: 10px 0 0 0; opacity: 0.9;">Action required regarding your HEMS services.</p>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Content Section -->
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="content-section">
+                <tr>
+                    <td>
+                        <p>Dear <strong>[User's Name]</strong>,</p>
+                        <p style="margin-bottom: 10px;">We're reaching out because your recent payment for HEMS services is **overdue**.</p>
+
+                        <!-- Highlighted Overdue Info -->
+                        <div class="highlight-box">
+                            <strong>Overdue Amount: [TotalAmount]</strong>
+                            <span>Member ID: [Member ID]</span>
+                            <span style="font-weight: 600; color: #D32F2F;">Missing this payment may affect your HEMS service continuity.</span>
+                        </div>
+
+                        <p>To ensure uninterrupted service and avoid any potential late fees, please settle the outstanding amount at your earliest convenience.</p>
+
+                        <!-- Payment Details Table -->
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="payment-table">
+                            <thead>
+                                <tr>
+                                    <th style="border-top-left-radius: 8px;">Item Description</th>
+                                    <th style="border-top-right-radius: 8px; text-align: right;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Monthly Subscription Fee (May 2025)</td>
+                                    <td style="text-align: right;">$50.00</td>
+                                </tr>
+                                <tr>
+                                    <td>Excess Energy Usage Charge</td>
+                                    <td style="text-align: right;">$15.50</td>
+                                </tr>
+                                <tr>
+                                    <td>Late Payment Fee</td>
+                                    <td style="text-align: right;">$5.00</td>
+                                </tr>
+                                <!-- Add more overdue items here -->
+                                <tr>
+                                    <td colspan="2" style="padding: 0;">&nbsp;</td> <!-- Spacer row -->
+                                </tr>
+                                <tr class="total-row">
+                                    <td>Total Outstanding Amount</td>
+                                    <td style="text-align: right;">$70.50</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Call to Action Button -->
+                        <div class="button-container">
+                            <a href="[Your Payment Redirection Link]" class="button" target="_blank" rel="noopener noreferrer">Pay Now to Restore Service</a>
+                        </div>
+
+                        <p>If you have already made this payment, please disregard this email. Your prompt attention to this matter is highly appreciated.</p>
+                        <p style="margin-top:20px;">Sincerely,<br>The HEMS Team</p>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Footer Section -->
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="footer-section">
+                <tr>
+                    <td>
+                        <p>&copy; 2025 HEMS. All rights reserved.</p>
+                        <p>Need help? Visit our <a href="[Your Support Page Link]" target="_blank" rel="noopener noreferrer" style="color: #ffffff; text-decoration: underline;">Support Center</a> or contact us at <a href="mailto:support@hems.com" style="color: #ffffff; text-decoration: underline;">support@hems.com</a>.</p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </center>
+</body>
+</html>
+    

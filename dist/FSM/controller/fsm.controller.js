@@ -183,6 +183,7 @@ const addFileToProject = async (req, res) => {
             mimeType: file.mimetype,
             uploadedBy: user._id,
         });
+        let token = req.query.token;
         await newFile.save();
         project.files.push(newFile._id);
         await project.save();
@@ -190,6 +191,7 @@ const addFileToProject = async (req, res) => {
             fileId: newFile.fileId,
             fileName: newFile.filename,
             fullPath: `${workspaceId}/${projectId}/${newFile.filename}`,
+            url: `${process.env.CDN_URL}/${workspaceId}/${projectId}/${newFile.filename}?token=${token}`,
         });
     }
     catch (error) {

@@ -29,6 +29,9 @@ const allowedMimeTypes = [
     "image/png",
     "image/jpg",
     "image/gif",
+    "image/webp",
+    "image/svg+xml",
+    "image/bmp",
     "application/pdf",
 ];
 const upload = (0, multer_1.default)({
@@ -39,7 +42,7 @@ const upload = (0, multer_1.default)({
             cb(null, true);
         }
         else {
-            cb(new Error("Only JPEG, PNG, GIF, or PDF files are allowed"));
+            cb(new Error("Only JPEG, PNG, GIF, WEBP, SVG,BMP or PDF files are allowed"));
         }
     },
 });
