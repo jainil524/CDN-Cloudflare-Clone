@@ -26,10 +26,13 @@ dotenv_1.default.config();
 const app = (0, express_1.default)();
 // Middleware stack
 app.use((0, cors_1.default)({
-    origin: process.env.CORS_ORIGIN || "*", // Allow all origins by default, can be restricted
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    origin: "*", // Allow all origins by default, can be restricted
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTION",
 }));
-app.use((0, helmet_1.default)());
+app.use((0, helmet_1.default)({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginEmbedderPolicy: false,
+}));
 app.use((0, compression_1.default)());
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
@@ -38,7 +41,7 @@ app.set("trust proxy", 1); // Trust first proxy for rate limiting
 // Rate limiter
 const limiter = (0, express_rate_limit_1.default)({
     windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 100,
+    max: 500,
     standardHeaders: true,
     legacyHeaders: false,
     message: {

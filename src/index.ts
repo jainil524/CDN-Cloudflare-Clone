@@ -1,4 +1,5 @@
 import 'module-alias/register';
+
 import express, { Request, Response, NextFunction } from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -26,8 +27,14 @@ dotenv.config();
 const app = express();
 
 // Middleware stack
-app.use(cors());
-app.use(helmet());
+app.use(cors({
+  origin: "*", // Allow all origins by default, can be restricted
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTION",
+}));
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" },
+  crossOriginEmbedderPolicy: false,
+}));
 app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,7 +45,7 @@ app.set("trust proxy", 1); // Trust first proxy for rate limiting
 // Rate limiter
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  max: 500,
   standardHeaders: true,
   legacyHeaders: false,
   message: {

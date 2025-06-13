@@ -191,7 +191,7 @@ const addFileToProject = async (req, res) => {
             fileId: newFile.fileId,
             fileName: newFile.filename,
             fullPath: `${workspaceId}/${projectId}/${newFile.filename}`,
-            url: `${process.env.CDN_URL}/${workspaceId}/${projectId}/${newFile.filename}?token=${token}`,
+            url: `${process.env.CDN_URL}/cdn/${workspaceId}/${projectId}/${newFile.filename}?token=${token}`,
         });
     }
     catch (error) {
